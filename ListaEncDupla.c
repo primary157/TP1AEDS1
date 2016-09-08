@@ -9,19 +9,62 @@ int LEDSize(TListaEnc le){					//Função que retorna sz(Tamanho atual da lista)
 	return le.sz;
 }
 int LEDInsere(TListaEnc *le){					//Função que insere item em sua devida posição na ordem crescente
+	LEDItem *i = NULL;
 	if(le->primeiro == NULL && le->ultimo == NULL){		//Falha se a lista for destruido ou nao inicializada
 		return 0;
 	}
 	LEDItem *novoItem = (LEDItem*)malloc(sizeof(LEDItem));	//Ponteiro para o novo ultimo
-	InicializarProcesso(&le->ultimo->info);			//Inicializa antigo ultimo que estava vazio
-	//if(abs(le->ultimo->info.PID - le->ultimo->ant->info.PID) < abs(le->ultimo->info.PID - le->primeiro->info.PID)){
-	
-	//}
+	InicializarProcesso(&novoItem->info);			//Inicializa antigo ultimo que estava vazio
+	if(le->ultimo->ant != NULL){
+		if((abs(novoItem->info.PID - le->ultimo->ant->info.PID) >= abs(novoItem->info.PID - le->primeiro->info.PID))){
+			//Percorrer do primeiro ate a pos esperada
+			for(i = le->primeiro; (i->info.PID < novoItem->info.PID) && (i != le->ultimo); i = i->prox){}
+			novoItem->prox = i;
+			novoItem->ant = i->ant;	
+			if(i->ant != NULL){
+				i->ant->prox = novoItem;
+			}
+			else{
+				//le->ultimo->ant = novoItem;
+				le->primeiro = novoItem;
+			}
+			i->ant = novoItem;
+		}
+		else{
+			//Percorrer do ultimo ate a pos esperada	
+			for(i = le->ultimo->ant;(i->info.PID > novoItem->info.PID) && (i->ant != NULL); i = i->ant){
+			}
+			if(i->ant == NULL && i->info.PID > novoItem->info.PID){
+				novoItem->ant = i->ant;
+				novoItem->prox = i;
+				i->ant = novoItem;
+				le->primeiro = novoItem;
+				//Colocar na primeira pos
+			}
+			else{
+				novoItem->prox = i->prox;
+				if(i->prox != NULL){
+					i->prox->ant = novoItem;
+				}
+				novoItem->ant = i;
+				i->prox = novoItem;
+			}
+		}
+	}
+	else{
+		novoItem->prox = le->ultimo;
+		novoItem->ant = NULL;
+		le->primeiro = novoItem;
+		le->ultimo->ant = novoItem;
+	}
+	/*
 	novoItem->ant = le->ultimo;				///Substitui antigo ultimo pelo novoItem vazio criado
 	novoItem->prox = le->ultimo->prox;			//
 	le->ultimo->prox = novoItem;				//
 	le->ultimo = novoItem;					//
+	*/
 	le->sz++;						//Incrementa tamanho da lista
+
 	return 1;
 }
 int LEDRetirarPrimeiro(TListaEnc *le){				//Funçao que retira menor item da lista

@@ -59,7 +59,6 @@ int main(void)
 	return 0;
 }
 */
-
 /*
 #ifndef LISTACURS_H_INCLUDED
 #define LISTACURS_H_INCLUDED
@@ -108,6 +107,7 @@ int main(void)
 	return 0;
 }
 */
+
 #include "ListaCurs.h"
 #include "ListaEncDupla.h"
 #define inFile "input.dat"
@@ -156,7 +156,7 @@ double mainListaCurs(TListaCurs *tlc,int tam, int num,int *Op,int *Qt){
 				break;
 		}
 	}
-	return ((double)fim-inicio)/(CLOCKS_PER_SEC/1000);
+	return ((double)fim-inicio)/(CLOCKS_PER_SEC);
 }
 double mainListaEnc(TListaEnc tle,int  num,int *Op,int *Qt){
 	clock_t inicio,fim;
@@ -184,7 +184,7 @@ double mainListaEnc(TListaEnc tle,int  num,int *Op,int *Qt){
 				break;
 		}
 	}
-	return ((double)fim-inicio)/(CLOCKS_PER_SEC/1000);
+	return ((double)fim-inicio)/(CLOCKS_PER_SEC);
 }
 int QuantosTestesJaFeitos(){
 	char ch;
@@ -240,3 +240,4 @@ int main(void)
 	}
 	return 0;
 }
+
