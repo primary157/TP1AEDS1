@@ -2,7 +2,7 @@
 //Inicializa cada variavel de um processo
 int InicializarProcesso(Processo *p){
 	const time_t tempo = time(NULL); 		//segundos desde Jan 1, 1970 00:00
-	unsigned int PID = rand();			//gerando PID aleatoriamente. [0,RAND_MAX]
+	unsigned int PID = rand()%200;			//gerando PID aleatoriamente. [0,RAND_MAX]
 	unsigned char prioridade = rand()%5 + 1;	//gerando prioridade aleatoriamente. [1,5]
 	Horario *hora_local = localtime(&tempo);	//captura do localtime do pc
 	SetCriadoEm(p,*hora_local);

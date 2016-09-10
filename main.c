@@ -80,7 +80,7 @@ int TLCRetirarUltimo(TListaCurs *lc);
 void TLCImprimir(TListaCurs *lc);
 #endif
 */
-/*
+
 #include "ListaCurs.h"
 int main(void)
 {
@@ -106,8 +106,8 @@ int main(void)
 	printf("\nSIZE = %d\n",TLCSize(&lista));
 	return 0;
 }
-*/
 
+/*
 #include "ListaCurs.h"
 #include "ListaEncDupla.h"
 #define inFile "input.dat"
@@ -240,4 +240,4 @@ int main(void)
 	}
 	return 0;
 }
-
+*/

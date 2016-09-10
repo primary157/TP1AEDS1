@@ -1,6 +1,7 @@
 #ifndef LISTACURS_H_INCLUDED
 #define LISTACURS_H_INCLUDED
 #include "Processo.h"
+#include <math.h> /* abs() */
 //Tipo de cada celula em uma Lista de Cursores
 typedef struct{
 	int prox, ant;	//Cursores para o index dos itens prox e ant

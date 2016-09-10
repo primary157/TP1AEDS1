@@ -1,28 +1,33 @@
 #include "ListaCurs.h"
+//Função Inicializadora de Lista Encadeada por Cursores
 void TLCInicializar(TListaCurs *lc,unsigned int n){
 	unsigned int i;
 	lc->primeiro = lc->ultimo = 0;
-	lc->items = (TLCItem *)malloc(sizeof(TLCItem)*n);
-	for (i = 1; i < n - 1; i++) {
-		lc->items[i].prox = i + 1;
-		lc->items[i].ant = i - 1;
-	}
-	lc->items[0].ant = -1;
+	lc->items = (TLCItem *)malloc(sizeof(TLCItem)*n);	//Utiliza-se alocação dinamica pois n pode ser um numero muito grande, levando a lista a n caber fora do heap
+	for (i = 1; i < n - 1; i++) {				//Em uma lista encadeada por cursores os cursores dos items de valores "apontam" para o item seguinte na ordem crescente de PID
+		lc->items[i].prox = i + 1;			//O cursor prox do maior item de valor "aponta" para o menor item vazio
+		lc->items[i].ant = i - 1;			//O cursor ant do menor item vazio "aponta" para o maior item de valor
+	}							//O cursor ant do menor item de valor tem valor -1
+	lc->items[0].ant = -1;					//O cursor prox do maior item vazio tem valor -1
 	lc->items[n-1].ant = n-2;
 	lc->items[0].prox = 1;
 	lc->items[n-1].prox = -1;
 
-	lc->sz = 0;
+	lc->sz = 0;	//o inteiro sz armazena o tamanho atual da lista (numero de itens com valor)
 }
+//Função Destruidora de Lista Encadeada por Cursores
 void TLCDestruir(TListaCurs *lc){
 	lc->primeiro = lc->ultimo = lc->sz = 0;
 	free(lc->items);
 	lc->sz = 0;
 }
+//Retorna Tamanho atual da lista encadeada por cursores
 int TLCSize(TListaCurs *lc){
 	return lc->sz;
 }
+//Função que insere item na lista encadeada por cursores, mantendo-a em ordem crescente
 int TLCInsere(TListaCurs *lc){
+
 	if(lc->items[lc->ultimo].prox == -1){
 		InicializarProcesso(&lc->items[lc->ultimo].info);
 		lc->sz++;
@@ -33,6 +38,7 @@ int TLCInsere(TListaCurs *lc){
 	lc->sz++;
 	return 1;
 }
+//Função que remove item de menor PID da lista encadeada por cursores
 int TLCRetirarPrimeiro(TListaCurs *lc){
 	if(lc->primeiro == lc->ultimo){
 		return 0;
@@ -45,6 +51,7 @@ int TLCRetirarPrimeiro(TListaCurs *lc){
 	lc->sz--;
 	return 1;
 }
+//Função que remove item de maior PID da lista encadeada por cursores
 int TLCRetirarUltimo(TListaCurs *lc){
 	if(lc->primeiro == lc->ultimo){
 		return 0;
@@ -62,6 +69,7 @@ void TLCImprimir(TListaCurs *lc){
 
 }
 */
+//Função que imprime cada item contido na lista encadeada por cursores
 void TLCImprimir(TListaCurs *lc){
 	int i, j = lc->primeiro;
 	for (i = 0; i != TLCSize(lc); i++) {

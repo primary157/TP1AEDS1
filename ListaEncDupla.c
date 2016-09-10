@@ -15,10 +15,15 @@ int LEDInsere(TListaEnc *le){					//Função que insere item em sua devida posi�
 	}
 	LEDItem *novoItem = (LEDItem*)malloc(sizeof(LEDItem));	//Ponteiro para o novo ultimo
 	InicializarProcesso(&novoItem->info);			//Inicializa antigo ultimo que estava vazio
-	if(le->ultimo->ant != NULL){
+	if(le->ultimo->ant != NULL){				//Sinonimo de LEDSize(le) == 0
 		if((abs(novoItem->info.PID - le->ultimo->ant->info.PID) >= abs(novoItem->info.PID - le->primeiro->info.PID))){
 			//Percorrer do primeiro ate a pos esperada
 			for(i = le->primeiro; (i->info.PID < novoItem->info.PID) && (i != le->ultimo); i = i->prox){}
+			if(i->info.PID == novoItem->info.PID){	//Se PID nao é unico gerar novos valores para Processo de novoItem
+				free(novoItem);
+				return  LEDInsere(le);
+				
+			}
 			novoItem->prox = i;
 			novoItem->ant = i->ant;	
 			if(i->ant != NULL){
@@ -32,7 +37,10 @@ int LEDInsere(TListaEnc *le){					//Função que insere item em sua devida posi�
 		}
 		else{
 			//Percorrer do ultimo ate a pos esperada	
-			for(i = le->ultimo->ant;(i->info.PID > novoItem->info.PID) && (i->ant != NULL); i = i->ant){
+			for(i = le->ultimo->ant;(i->info.PID > novoItem->info.PID) && (i->ant != NULL); i = i->ant){}
+			if(i->info.PID == novoItem->info.PID){	//Se PID nao é unico gerar novos valores para Processo de novoItem
+				free(novoItem);
+				return  LEDInsere(le);
 			}
 			if(i->ant == NULL && i->info.PID > novoItem->info.PID){
 				novoItem->ant = i->ant;

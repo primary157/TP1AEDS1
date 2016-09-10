@@ -1,7 +1,7 @@
 #ifndef LISTAENCDUPLA_H_INCLUDED
 #define LISTAENCDUPLA_H_INCLUDED
 #include "Processo.h"
-#include <math.h> /* abs */
+#include <math.h> /* abs() */
 //Tipo de cada celula em uma Lista Duplamente Encadeada
 typedef struct _LEDItem{
 	struct _LEDItem *prox, *ant;	//Ponteiros para proximo na lista e anterior na lista

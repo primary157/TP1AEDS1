@@ -1,6 +1,6 @@
 #ifndef PROCESSO_H_INCLUDED
 #define PROCESSO_H_INCLUDED
-#include <stdio.h>	/* printf */
+#include <stdio.h>	/* printf() */
 #include <stdlib.h>	/* srand(), rand() */
 #include <time.h>	/* struct tm, localtime(), time(), difftime(), asctime() */
 typedef struct tm Horario;	//Definindo Horario a partir da struct tm
