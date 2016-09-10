@@ -27,14 +27,35 @@ int TLCSize(TListaCurs *lc){
 }
 //Função que insere item na lista encadeada por cursores, mantendo-a em ordem crescente
 int TLCInsere(TListaCurs *lc){
-
-	if(lc->items[lc->ultimo].prox == -1){
-		InicializarProcesso(&lc->items[lc->ultimo].info);
-		lc->sz++;
-		return 0;
-	}
+	int i = lc->primeiro,
+	    velho_ultimo_de_valor = lc->items[lc->ultimo].ant,
+	    novo_ultimo = lc->items[lc->ultimo].prox;	//no ultimo item do vetor vai receber -1
 	InicializarProcesso(&lc->items[lc->ultimo].info);
-	lc->ultimo = lc->items[lc->ultimo].prox;
+	while(i != lc->ultimo){		//Se tiver alguem que é maior que o novo valor e (lc->primeiro != lc->ultimo)
+		if(lc->items[lc->ultimo].info.PID < lc->items[i].info.PID){
+			lc->items[lc->ultimo].prox = i;
+			lc->items[lc->ultimo].ant = lc->items[i].ant;
+			lc->items[i].ant = lc->ultimo;
+			lc->ultimo = novo_ultimo;
+			lc->items[velho_ultimo_de_valor].prox = lc->ultimo;
+			if(novo_ultimo != -1){
+				lc->items[novo_ultimo].ant = velho_ultimo_de_valor;
+			}
+			else{
+				lc->sz++;
+				return 0;
+			}
+			lc->sz++;
+			return 1;
+		}
+		else if(lc->items[lc->ultimo].info.PID == lc->items[i].info.PID){
+			return TLCInsere(lc);
+		}
+		i = lc->items[i].prox;
+	}
+	//Se é a primeiro inserção na lista
+	//E/Ou se o novo valor é maior do que todos os items da lista / i == lc->ultimo, que é o novo item de valor
+	lc->ultimo = novo_ultimo;
 	lc->sz++;
 	return 1;
 }
@@ -73,6 +94,7 @@ void TLCImprimir(TListaCurs *lc){
 void TLCImprimir(TListaCurs *lc){
 	int i, j = lc->primeiro;
 	for (i = 0; i != TLCSize(lc); i++) {
+		printf("%d\n",j);
 		ImprimeProcesso(lc->items[j].info);
 		j = lc->items[j].prox;
 	}
