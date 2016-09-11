@@ -80,7 +80,7 @@ int TLCRetirarUltimo(TListaCurs *lc);
 void TLCImprimir(TListaCurs *lc);
 #endif
 */
-
+/*
 #include "ListaCurs.h"
 int main(void)
 {
@@ -106,8 +106,8 @@ int main(void)
 	printf("\nSIZE = %d\n",TLCSize(&lista));
 	return 0;
 }
+*/
 
-/*
 #include "ListaCurs.h"
 #include "ListaEncDupla.h"
 #define inFile "input.dat"
@@ -143,6 +143,7 @@ double mainListaCurs(TListaCurs *tlc,int tam, int num,int *Op,int *Qt){
 					TLCInsere(tlc);
 				}
 				fim = clock();
+
 				break;
 			case 1:
 				for(j = 0; j < Qt[i]; j++){
@@ -150,6 +151,7 @@ double mainListaCurs(TListaCurs *tlc,int tam, int num,int *Op,int *Qt){
 				}
 				inicio = clock();
 				for(j = 0; j < Qt[i] - 1; j++){
+
 					TLCRetirarPrimeiro(tlc);
 				}
 				fim = clock();
@@ -200,7 +202,6 @@ int QuantosTestesJaFeitos(){
 		fclose(output);
 	}
 	else{
-		printf("Nao existe ouput.dat");	
 	}
 	return lines;
 }
@@ -240,4 +241,4 @@ int main(void)
 	}
 	return 0;
 }
-*/
+

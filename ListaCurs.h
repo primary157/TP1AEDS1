@@ -16,6 +16,8 @@ typedef struct{
 void TLCInicializar(TListaCurs *lc,unsigned int n);	//Inicializa uma lista
 void TLCDestruir(TListaCurs *lc);			//Destroi uma lista
 int TLCSize(TListaCurs *lc);				//Retorna tamanho atual da lista
+int _ulttopri(TListaCurs *lc,int velho_ultimo_de_valor, int novo_ultimo);
+int _pritoult(TListaCurs *lc,int velho_ultimo_de_valor, int novo_ultimo);
 int TLCInsere(TListaCurs *lc);				//Insere item na lista em ordem crescente
 int TLCRetirarPrimeiro(TListaCurs *lc);			//Retira primeiro item da lista
 int TLCRetirarUltimo(TListaCurs *lc);			//Retira ultimo item da lista
