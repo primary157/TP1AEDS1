@@ -209,7 +209,15 @@ int EscreverOutput(double TempoCurs, double TempoEnc){
 	int lines = QuantosTestesJaFeitos();
 	FILE *output;
 	if((output = fopen(outFile,"a")) != NULL){
-		fprintf(output,"%d %lf %lf\n",lines+1,TempoCurs,TempoEnc);
+		if(TempoEnc == 0.0){
+			fprintf(output,"%d LED %lf\n",lines+1,TempoEnc);
+		}
+		else if(TempoCurs == 0.0){
+			fprintf(output,"%d LC %lf\n",lines+1,TempoCurs);
+		}
+		else{
+			fprintf(output,"%d %lf %lf\n",lines+1,TempoCurs,TempoEnc);
+		}
 		return 1;
 	}
 	else{
@@ -220,7 +228,7 @@ int EscreverOutput(double TempoCurs, double TempoEnc){
 }
 int main(void)
 {
-	double TempoCurs, TempoEnc;
+	double TempoCurs = 0.0, TempoEnc = 0.0;
 	int tamDaLista, tipoDaLista, numOperacoes, *Op, *Qt;
 	TListaCurs tlc; 
 	TListaEnc tle;
@@ -229,12 +237,19 @@ int main(void)
 	if(!lerInput(&tamDaLista,&tipoDaLista,&numOperacoes,&Op,&Qt)){
 		printf("Erro! Nao existe input.dat\n");
 	}
-	
-	TempoCurs = mainListaCurs(&tlc,tamDaLista,numOperacoes,Op,Qt);
-
-	TempoEnc = mainListaEnc(tle,numOperacoes,Op,Qt);
+	if(tipoDaLista == 0){
+		TempoCurs = mainListaCurs(&tlc,tamDaLista,numOperacoes,Op,Qt);
+	}
+	else if(tipoDaLista == 1){
+		TempoEnc = mainListaEnc(tle,numOperacoes,Op,Qt);
+		
+	}
+	else{
+		TempoCurs = mainListaCurs(&tlc,tamDaLista,numOperacoes,Op,Qt);
+		TempoEnc = mainListaEnc(tle,numOperacoes,Op,Qt);
+	}
 	LEDDestruir(&tle);
-	//TLCDestruir(tlc); A SER ESTUDADO
+	TLCDestruir(&tlc); //A SER ESTUDADO
 
 	if(!EscreverOutput(TempoCurs,TempoEnc)){
 		printf("Erro! Nao tem como escrever em output.dat\n");
