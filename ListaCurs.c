@@ -33,18 +33,22 @@ int TLCInsere(TListaCurs *lc){
 	InicializarProcesso(&lc->items[lc->ultimo].info);
 	while(i != lc->ultimo){		//Se tiver alguem que é maior que o novo valor e (lc->primeiro != lc->ultimo)
 		if(lc->items[lc->ultimo].info.PID < lc->items[i].info.PID){
+			if(i == lc->primeiro){		//Se o primeiro item que é maior do que o novo. Entao o novo se tornara o primeiro item da lista
+				lc->primeiro = lc->ultimo;	
+			}
 			lc->items[lc->ultimo].prox = i;
 			lc->items[lc->ultimo].ant = lc->items[i].ant;
-			lc->items[i].ant = lc->ultimo;
-			lc->ultimo = novo_ultimo;
-			lc->items[velho_ultimo_de_valor].prox = lc->ultimo;
-			if(novo_ultimo != -1){
-				lc->items[novo_ultimo].ant = velho_ultimo_de_valor;
+			if(lc->items[i].ant != -1){		//o anterior do primeiro é -1 e item[-1] esta fora do escopo
+				lc->items[lc->items[i].ant].prox = lc->ultimo;	
 			}
-			else{
+			lc->items[i].ant = lc->ultimo;
+			lc->items[velho_ultimo_de_valor].prox = novo_ultimo;
+			if(novo_ultimo == -1){
 				lc->sz++;
 				return 0;
 			}
+			lc->ultimo = novo_ultimo;
+			lc->items[novo_ultimo].ant = velho_ultimo_de_valor;
 			lc->sz++;
 			return 1;
 		}
@@ -74,7 +78,7 @@ int TLCRetirarPrimeiro(TListaCurs *lc){
 }
 //Função que remove item de maior PID da lista encadeada por cursores
 int TLCRetirarUltimo(TListaCurs *lc){
-	if(lc->primeiro == lc->ultimo){
+	if(lc->primeiro == lc->ultimo){ 	//Sinonimo para TLCSize(lc) == 0
 		return 0;
 	}
 	lc->ultimo = lc->items[lc->ultimo].ant;
@@ -94,7 +98,6 @@ void TLCImprimir(TListaCurs *lc){
 void TLCImprimir(TListaCurs *lc){
 	int i, j = lc->primeiro;
 	for (i = 0; i != TLCSize(lc); i++) {
-		printf("%d\n",j);
 		ImprimeProcesso(lc->items[j].info);
 		j = lc->items[j].prox;
 	}
