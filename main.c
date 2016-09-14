@@ -1,3 +1,5 @@
+//*********************************************\/\/\/\/ TESTES \/\/\/\/*********************************************
+
 /* Testando Processo
 #include "Processo.h"
 int main(void)
@@ -9,31 +11,8 @@ int main(void)
 	return 0;
 }
 */
-/*
-#ifndef LISTAENCDUPLA_H_INCLUDED
-#define LISTAENCDUPLA_H_INCLUDED
-#include "Processo.h"
-typedef struct _LEDItem{
-	struct _LEDItem *prox, *ant;
-	Processo info;
-} LEDItem;
-typedef struct{
-	LEDItem *primeiro, *ultimo;
-	int sz;
-} TListaEnc;
-void LEDInicializar(TListaEnc *le);
-void LEDDestruir(TListaEnc *le);
-int LEDSize(TListaEnc *le);
-int LEDInsere(TListaEnc *le);
-int LEDRetirarPrimeiro(TListaEnc *le);
-int LEDRetirarUltimo(TListaEnc *le);
-void LEDImprimir(TListaEnc *le);
+/* Testando Lista Duplamente Encadeada
 
-#endif
-
- */
-/* Testando Lista Duplamente Encadeada */
-/*
 #include "ListaEncDupla.h"
 int main(void)
 {
@@ -59,28 +38,7 @@ int main(void)
 	return 0;
 }
 */
-/*
-#ifndef LISTACURS_H_INCLUDED
-#define LISTACURS_H_INCLUDED
-#include "Processo.h"
-typedef struct{
-	int prox, ant;
-	Processo info;
-} TLCItem;
-typedef struct{
-	int primeiro, ultimo;
-	TLCItem *items;
-	int sz;
-} TListaCurs;
-void TLCInicializar(TListaCurs *lc,unsigned int n);
-int TLCSize(TListaCurs *lc);
-int TLCInsere(TListaCurs *lc);
-int TLCRetirarPrimeiro(TListaCurs *lc);
-int TLCRetirarUltimo(TListaCurs *lc);
-void TLCImprimir(TListaCurs *lc);
-#endif
-*/
-/*
+/* Testando Lista de Cursores
 #include "ListaCurs.h"
 int main(void)
 {
@@ -108,21 +66,25 @@ int main(void)
 }
 */
 
-#include "ListaCurs.h"
-#include "ListaEncDupla.h"
-#define inFile "input.dat"
-#define outFile "output.dat"
+//*********************************************\/\/\/\/ FUNÇÕES PRINCIPAIS \/\/\/\/*********************************************
+
+#include "ListaCurs.h"		/* TLCInicializar(), TLCDestruir(), TLCSize(), TLCInsere(), TLCRetirarPrimeiro() */
+#include "ListaEncDupla.h"	/* LEDInicializar(), LEDDestruir(), LEDSize(), LEDInsere(), LEDRetirarPrimeiro() */
+#define inFile "input.dat"	//Arquivo de entrada
+#define outFile "output.dat"	//Arquivo de saida
+
+//Lê Arquivo de entrada
 int lerInput(int *tam, int *tipo, int *num, int **Op, int **Qt){
 	int i;
 	FILE* input;
-	if((input = fopen(inFile,"r")) != NULL){
-		fscanf(input,"%d\n%d\n%d\n",tam,tipo,num);
-		*Op = (int*)malloc(sizeof(int)*(*num));
-		*Qt = (int*)malloc(sizeof(int)*(*num));
-		for(i = 0; i < *num;i++){
-			fscanf(input,"%d %d\n",&(*Op)[i],&(*Qt)[i]);
+	if((input = fopen(inFile,"r")) != NULL){	//Confere existencia
+		fscanf(input,"%d\n%d\n%d\n",tam,tipo,num);	//Obtem dados do arquivo atribuindo-os as variaveis tam, tipo e num
+		*Op = (int*)malloc(sizeof(int)*(*num));			///Aloca espaço suficiente para o numero(num) de instruçoes no arquivo
+		*Qt = (int*)malloc(sizeof(int)*(*num));			//
+		for(i = 0; i < *num;i++){				//
+			fscanf(input,"%d %d\n",&(*Op)[i],&(*Qt)[i]);	//Atribui valor obtido para cada instruçao no arquivo
 		}
-		fclose(input);
+		fclose(input);	//Fecha apropriadamente o arquivo
 		return 1;
 	}
 	else{
@@ -131,127 +93,141 @@ int lerInput(int *tam, int *tipo, int *num, int **Op, int **Qt){
 
 
 }
+//Função que ira executar as instruçoes especificadas no arquivo de entrada e calcular o tempo de execução
 double mainListaCurs(TListaCurs *tlc,int tam, int num,int *Op,int *Qt){
-	clock_t inicio, fim;
+	clock_t inicio = 0, fim = 0;		//Variaveis usadas para calcular tempo de execução
 	int i, j;
-	TLCInicializar(tlc,tam);
+	TLCInicializar(tlc,tam);	//Inicializa a lista de cursores de acordo com tamanho especificado no arquivo de entrada
 	for(i = 0;i<num;i++){
 		switch(Op[i]){
-			case 0:
-				inicio = clock();
+			case 0:		//Se instrução é de inserção
+				if(!inicio){ //Captura do tempo inicial
+                                    inicio = clock();
+                                }
 				for(j = 0; j < Qt[i]; j++){
-					TLCInsere(tlc);
+					TLCInsere(tlc);	//Insere item na lista
 				}
-				fim = clock();
+				fim = clock();	//Captura do tempo final
 
 				break;
-			case 1:
+			case 1:		//Se instrução é de remoção
 				for(j = 0; j < Qt[i]; j++){
-					TLCInsere(tlc);
+					TLCInsere(tlc);	//Insere item na lista
 				}
-				inicio = clock();
+				if(!inicio){ //Captura do tempo inicial
+                                    inicio = clock();
+                                }
 				for(j = 0; j < Qt[i] - 1; j++){
 
-					TLCRetirarPrimeiro(tlc);
+					TLCRetirarPrimeiro(tlc);	//Remove item da lista
 				}
-				fim = clock();
+				fim = clock();	//Captura do tempo final
+
 				break;
 		}
 	}
-	return ((double)fim-inicio)/(CLOCKS_PER_SEC);
+	return ((double)fim-inicio)/(CLOCKS_PER_SEC);	//Converte o tempo, que é calculado em clocks, para segundos
 }
+//Função que ira executar as instruçoes especificadas no arquivo de entrada e calcular o tempo de execução
 double mainListaEnc(TListaEnc tle,int  num,int *Op,int *Qt){
-	clock_t inicio,fim;
+	clock_t inicio,fim;		//Variaveis usadas para calcular tempo de execução
 	int i, j;
-	 
-	LEDInicializar(&tle);
+
+	LEDInicializar(&tle);	//Inicializa a lista Duplamente Encadeada de acordo com tamanho especificado no arquivo de entrada
 	for(i = 0;i<num;i++){
 		switch(Op[i]){
-			case 0:
-				inicio = clock();
+			case 0:		//Se instrução é de inserção
+				inicio = clock();	//Captura do tempo inicial
 				for(j = 0; j < Qt[i]; j++){
-					LEDInsere(&tle);
+					LEDInsere(&tle);	//Insere item na lista
 				}
-				fim = clock();
+				fim = clock();	//Captura do tempo final
 				break;
-			case 1:
+			case 1:		//Se instrução é de remoção
+
 				for(j = 0; j < Qt[i]; j++){
-					LEDInsere(&tle);
+					LEDInsere(&tle);	//Insere item na lista
 				}
-				inicio = clock();
+				inicio = clock();	//Captura do tempo inicial
 				for(j = 0; j < Qt[i]; j++){
-					LEDRetirarPrimeiro(&tle);
+					LEDRetirarPrimeiro(&tle);	//Remove item da lista
 				}
-				fim = clock();
+				fim = clock();	//Captura do tempo final
+
 				break;
 		}
 	}
-	return ((double)fim-inicio)/(CLOCKS_PER_SEC);
+	return ((double)fim-inicio)/(CLOCKS_PER_SEC);	//Converte o tempo, que é calculado em clocks, para segundos
 }
+//Confere quantos testes estao especificados no arquivo de saida
 int QuantosTestesJaFeitos(){
-	char ch;
-	int lines = 0;
-	FILE *output;
-	if((output = fopen(outFile,"r"))!=NULL){
-		while(!feof(output)){
-			ch = fgetc(output);
-			if(ch == '\n'){
-				lines++;
+	char ch;	//iteradora
+	int lines = 0;	//Num de testes
+	FILE *output;	//Ponteiro para arquivo de saida
+	if((output = fopen(outFile,"r"))!=NULL){	//Se arquivo nao existir retorna valor inicial de testes
+		while(!feof(output)){			//Percorre ate o final do arquivo
+			ch = fgetc(output);		
+			if(ch == '\n'){			//Captura quebras de linha
+				lines++;		//Incrementa numero de testes
 			}
 		}
-		fclose(output);
+		fclose(output);				//Fecha arquivo apropriadamente
 	}
-	else{
-	}
-	return lines;
+	return lines;		//retorna numero de testes
 }
+//Escreve no arquivo de saida
 int EscreverOutput(double TempoCurs, double TempoEnc){
-	int lines = QuantosTestesJaFeitos();
-	FILE *output;
-	if((output = fopen(outFile,"a")) != NULL){
-		if(TempoEnc == 0.0){
-			fprintf(output,"%d LED %lf\n",lines+1,TempoEnc);
+	int lines = QuantosTestesJaFeitos();	//Armazena numero de testes em variavel
+	FILE *output;	//Ponteiro para arquivo de saida
+	if((output = fopen(outFile,"a")) != NULL){	//Testa permissao para alteração
+		if(TempoEnc == 0.0 && TempoCurs != 0.0){	//Confere se houve alguma operação feita por lista duplamente encadeada apenas
+			fprintf(output,"Teste numero %d\t- Tempo Lista Cursores: %lf\n",lines+1,TempoCurs);	//Escreve no arquivo de saida
 		}
-		else if(TempoCurs == 0.0){
-			fprintf(output,"%d LC %lf\n",lines+1,TempoCurs);
+		else if(TempoCurs == 0.0 && TempoEnc != 0.0){ //Confere se houve alguma operação feita por lista de cursores apenas
+			fprintf(output,"Teste numero %d\t- Tempo Lista Duplamente Encadeada: %lf\n",lines+1,TempoEnc);	//Escreve no arquivo de saida
 		}
 		else{
-			fprintf(output,"%d %lf %lf\n",lines+1,TempoCurs,TempoEnc);
+			fprintf(output,"Teste numero %d\t- Tempo Lista Cursores: %lf - Tempo Lista Duplamente Encadeada: %lf\n",lines+1,TempoCurs,TempoEnc);	//Escreve no arquivo de saida
 		}
+		fclose(output);	//Fecha arquivo apropriadamente
 		return 1;
 	}
 	else{
 		return 0;
 	}
-	
+
 
 }
+//Função Principal
 int main(void)
 {
-	double TempoCurs = 0.0, TempoEnc = 0.0;
-	int tamDaLista, tipoDaLista, numOperacoes, *Op, *Qt;
-	TListaCurs tlc; 
-	TListaEnc tle;
+	double TempoCurs = 0.0, TempoEnc = 0.0;		//Declara variaveis que armazenam o tempo decorrido nas operações requisitadas no arquivo de entrada
+	int tamDaLista, tipoDaLista, numOperacoes, *Op, *Qt;	//Declara variaveis que armazenem info do arquivo de entrada
+	TListaCurs tlc;	//Declara lista de cursores
+	TListaEnc tle;	//Declara lista duplamente encadeada
 
-	srand(time(NULL));
-	if(!lerInput(&tamDaLista,&tipoDaLista,&numOperacoes,&Op,&Qt)){
+	srand(time(NULL));	//Determina semente para gerar numero aleatorio
+	if(!lerInput(&tamDaLista,&tipoDaLista,&numOperacoes,&Op,&Qt)){	//Confere se a função lerInput foi bem sucedida
 		printf("Erro! Nao existe input.dat\n");
 	}
-	if(tipoDaLista == 0){
+	if(tipoDaLista == 0){	//Se a lista requisitada for lista de cursores
 		TempoCurs = mainListaCurs(&tlc,tamDaLista,numOperacoes,Op,Qt);
+		TLCDestruir(&tlc); //Destroi lista de forma segura
 	}
-	else if(tipoDaLista == 1){
+	else if(tipoDaLista == 1){	//Se a lista requisitada for lista duplamente encadeada
 		TempoEnc = mainListaEnc(tle,numOperacoes,Op,Qt);
-		
+		LEDDestruir(&tle); //Destroi lista de forma segura
 	}
-	else{
+	else{	//Se nao for requisitado nenhuma lista especifica
 		TempoCurs = mainListaCurs(&tlc,tamDaLista,numOperacoes,Op,Qt);
 		TempoEnc = mainListaEnc(tle,numOperacoes,Op,Qt);
+		TLCDestruir(&tlc); //Destroi lista de forma segura
+		LEDDestruir(&tle); //Destroi lista de forma segura
 	}
-	LEDDestruir(&tle);
-	TLCDestruir(&tlc); //A SER ESTUDADO
 
-	if(!EscreverOutput(TempoCurs,TempoEnc)){
+
+	
+	if(!EscreverOutput(TempoCurs,TempoEnc)){	//Confere se a função EscreverOutput foi bem sucedida
 		printf("Erro! Nao tem como escrever em output.dat\n");
 	}
 	return 0;
