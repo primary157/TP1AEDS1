@@ -3,17 +3,14 @@
 //**************************\/\/\/\/  INICIALIZAR  \/\/\/\/******************************************
 
 //Inicializa cada variavel de um processo
-int InicializarProcesso(Processo *p){
+void InicializarProcesso(Processo *p){
 	const time_t tempo = time(NULL); 		//segundos desde Jan 1, 1970 00:00
 	unsigned int PID = rand();			//gerando PID aleatoriamente. [0,RAND_MAX]
 	unsigned char prioridade = rand()%5 + 1;	//gerando prioridade aleatoriamente. [1,5]
 	Horario *hora_local = localtime(&tempo);	//captura do localtime do pc
 	SetCriadoEm(p,*hora_local);                 //chama a Funçao para definir um novo horario de criacao de um processo
 	SetPID(p,PID);                              //chama a funcao para definir o ID
-	if(!SetPrioridade(p,prioridade)){           //Cheka a prioridade para ver se esta aceitavel acima de 0 e menor que 6
-		return 0;
-	}
-	return 1;
+	SetPrioridade(p,prioridade);           //Chama a função para definir a prioridade do Processo
 }
 
 //*******************************\/\/\/\/  IMPRIMIR  \/\/\/\/*******************************************

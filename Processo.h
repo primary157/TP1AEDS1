@@ -1,4 +1,7 @@
 #ifndef PROCESSO_H_INCLUDED
+//*********************************************\/\/\/\/ FUNÇÕES PRINCIPAIS \/\/\/\/*********************************************
+//*********************************************\/\/\/\/ FUNÇÕES PRINCIPAIS \/\/\/\/*********************************************
+//*********************************************\/\/\/\/ FUNÇÕES PRINCIPAIS \/\/\/\/*********************************************
 #define PROCESSO_H_INCLUDED
 #include <stdio.h>	/* printf() */
 #include <stdlib.h>	/* srand(), rand() */
@@ -11,7 +14,7 @@ typedef struct {
 	unsigned char prioridade; //Prioridade do processo podendo variar entre [1,5]
 } Processo;
 
-int InicializarProcesso(Processo *p); //Inicializa cada variavel em um processo
+void InicializarProcesso(Processo *p); //Inicializa cada variavel em um processo
 void ImprimeProcesso(Processo p); //Funçao que imprime as informacoes do processo
 
 //Setters

@@ -1,7 +1,7 @@
 LIBS="-lm"
 FILES=$(shell find . -name '*.c')
 OBJECTS=$(shell find . -name '*.c' | sed -e 's/".c"/".o"/g')
-EXEC="teste"
+EXEC="Programa.exe"
 bindir="$(shell echo $(HOME))/binario/"
 all: objects $(EXEC)
 .PHONY: uninstall install clean mrproper reinstall help
@@ -18,7 +18,7 @@ $(EXEC): $(OBJECTS)
 objects: $(FILES)
 	gcc -c $^ $(LIBS)
 clean:
-	rm *.o
+	rm -f *.o
 mrproper: clean
-	rm teste
+	rm -f $(EXEC)
 
