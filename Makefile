@@ -1,4 +1,4 @@
-LIBS="-lm"
+LIBS=-O3 -lm
 FILES=$(shell find . -name '*.c')
 OBJECTS=$(shell find . -name '*.c' | sed -e 's/".c"/".o"/g')
 EXEC="Programa.exe"
